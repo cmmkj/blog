@@ -10,6 +10,12 @@ module.exports = {
       .findOne({name})
       .addCreatedAt()
       .exec()
+  },
+  getUserById: function getUserById(userId){
+    return User
+      .findOne({_id: userId})
+      .addCreatedAt()
+      .exec()
   }
 }
 

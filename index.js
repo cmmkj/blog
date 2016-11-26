@@ -4,9 +4,11 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 const flash = require('connect-flash')
 const config = require('config-lite')
-//const config = require('./config/default')
 const routes = require('./routes')
 const pkg = require('./package')
+//日志相关模块
+const winston = require('winston')
+const expressWinston = require('express-winston')
 
 let app = express()
 
@@ -47,12 +49,52 @@ app.use(require('express-formidable')({
   keepExtension: true   //保留后缀
 }))
 
-
-
+/*
+//正常请求日志放在路由前面
+app.use(expressWinston.logger({
+  transports: [
+    new (winston.transports.Console)({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/success.log'
+    })
+  ]
+}))
+*/
 routes(app)
-
+/*
+//错误请求日志放在路由后面
+app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/error.log'
+    })
+  ]
+}))
+*/
+app.use((err, req, res, next) => {
+  res.render('error', {
+    error: err
+  })
+}) 
+/*
 app.listen(config.port, () => {
   console.log(`${pkg.name} listening on port ${config.port}`)
 })
+*/
+if(module.parent){
+  module.exports = app  //如果index.js被require了，则导出app
+}else{
+  app.listen(config.port, function(){
+    console.log(`${pkg.name} listening on port ${config.port}`)
+  })
+}
+
 
 
