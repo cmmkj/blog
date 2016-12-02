@@ -16,7 +16,7 @@ describe('signup', () => {
         gender: 'x',
         bio: ''
       })
-      .exec()
+//      .exec()
       .then(() => {
         done()
       })
@@ -26,7 +26,7 @@ describe('signup', () => {
     afterEach(done => {
       //清空user表
       User.remove({})
-        .exec()
+//        .exec()
         .then(() => {
           done()
         })
@@ -48,35 +48,7 @@ describe('signup', () => {
         });
     });
 
-/*    it('wrong name', function(done){
-      agent
-        .post('/signup')
-        .type('form')
-        .attach('avatar', path.join(__dirname, 'avatar.png'))
-        .field({name: ''})
-        .redirects()
-        .end((err, res) => {
-          if(err) return done(err)
-          assert(res.text.match(/名字请限制在１－１０个字符/))
-          done()
-        })
-    }) */
-    //性别错误的情况
-/*
-    it('wrong gender', function(done) {
-      agent
-        .post('/signup')
-        .type('form')
-        .attach('avatar', path.join(__dirname, 'avatar.png'))
-        .field({ name: 'nswbmw', gender: 'a' })
-        .redirects()
-        .end(function(err, res) {
-          if (err) return done(err);
-          assert(res.text.match(/性别只能是m,f或x/));
-          done();
-        });
-    });  */ 
-    it('Wrong gender', done => {
+   it('Wrong gender', done => {
       agent
         .post('/signup')
         .type('form')
